@@ -1,0 +1,199 @@
+﻿
+@page
+@model Ordenbackend.Ordenes
+@{
+    ViewData["Title"] = "Postres";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primario: #FB4B01;
+            --color-secundario: #353A40;
+            --color-terciario: #F79A0A;
+            --color-fondo: #F5F5F5;
+            --color-icono: #008E97;
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            font-family: Arial, sans-serif;
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-header {
+            color: var(--color-primario);
+            font-weight: bold;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 1rem;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+            .cart-item:hover {
+                transform: scale(1.02);
+            }
+
+            .cart-item img {
+                width: 90px;
+                height: 90px;
+                border-radius: 10px;
+                margin-right: 20px;
+            }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--color-secundario);
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--color-terciario);
+            font-weight: bold;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+
+            .quantity-controls button {
+                background-color: var(--color-primario);
+                color: white;
+                border: none;
+                padding: 0.3rem 0.6rem;
+                font-size: 1.2rem;
+                border-radius: 6px;
+                margin: 0 5px;
+                cursor: pointer;
+            }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0.3rem;
+            color: var(--color-secundario);
+            background-color: #F5F5F5;
+            display: inline-block;
+        }
+
+        .remove-btn {
+            color: var(--color-icono);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .cart-total {
+            text-align: right;
+            margin-top: 30px;
+        }
+
+            .cart-total h4 {
+                color: var(--color-primario);
+                font-size: 1.6rem;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="cart-container" style="margin-bottom: 500px;">
+        <h2 class="cart-header">Tu Carrito</h2>
+
+        <!-- Artículo en el carrito -->
+        <div class="cart-item">
+            <img src="https://via.placeholder.com/90" alt="Pizza Rajas">
+            <div class="cart-item-details">
+                <div class="cart-item-title">Pizza Rajas</div>
+                <div class="cart-item-price">$150.00 MXN</div>
+            </div>
+            <div class="quantity-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity-input">1</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+            <i class="bi bi-trash remove-btn" onclick="removeItem(this)"></i>
+        </div>
+
+        <div class="cart-item">
+            <img src="https://via.placeholder.com/90" alt="Pizza Cochinita">
+            <div class="cart-item-details">
+                <div class="cart-item-title">Pizza Cochinita</div>
+                <div class="cart-item-price">$160.00 MXN</div>
+            </div>
+            <div class="quantity-controls">
+                <button onclick="changeQuantity(this, -1)">-</button>
+                <span class="quantity-input">1</span>
+                <button onclick="changeQuantity(this, 1)">+</button>
+            </div>
+            <i class="bi bi-trash remove-btn" onclick="removeItem(this)"></i>
+        </div>
+
+        <div class="cart-total">
+            <h4>Total: <span id="cart-total-price">$310.00 MXN</span></h4>
+        </div>
+    </div>
+
+    <script>
+        function updateTotal() {
+            let cartItems = document.querySelectorAll('.cart-item');
+            let total = 0;
+
+            cartItems.forEach(item => {
+                let itemPrice = parseFloat(item.querySelector('.cart-item-price').textContent.replace('$', '').replace(' MXN', ''));
+                let itemQuantity = parseInt(item.querySelector('.quantity-input').textContent);
+                total += itemPrice * itemQuantity;
+            });
+
+            document.getElementById('cart-total-price').textContent = `$${total.toFixed(2)} MXN`;
+        }
+
+        function changeQuantity(button, amount) {
+            let quantityElement = button.closest('.quantity-controls').querySelector('.quantity-input');
+            let quantity = parseInt(quantityElement.textContent) + amount;
+            quantityElement.textContent = quantity > 0 ? quantity : 1;
+            updateTotal();
+        }
+
+        function removeItem(button) {
+            let item = button.closest('.cart-item');
+            item.remove();
+            updateTotal();
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+﻿@page
+@model MenuComida.Pages.carritov2.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>carrito</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.carrito.producto)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.carrito.producto)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.carrito.imagen)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.carrito.imagen)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.carrito.cantidad)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.carrito.cantidad)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.carrito.precio)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.carrito.precio)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.carrito.idUsuario)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.carrito.idUsuario)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.carrito.idpedido">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

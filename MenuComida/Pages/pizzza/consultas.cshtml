@@ -1,0 +1,60 @@
+﻿@page
+@model MenuComida.Pages.pizzza.consultasModel
+
+@{
+    ViewData["Title"] = "consultas";
+}
+
+<h1>consultas</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form method="get">
+    <label for="searchId">Buscar por ID:</label>
+    <input type="number" id="searchId" name="searchId" value="@Model.SearchId" />
+
+    <label for="searchType">Buscar por Tipo:</label>
+    <input type="text" id="searchType" name="searchType" value="@Model.SearchType" />
+
+    <button type="submit">Buscar</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Pizzas[0].id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pizzas[0].tipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pizzas[0].precio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+@foreach (var item in Model.Pizzas) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tipo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.precio)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.id">Details</a> |
+                @* <a asp-page="./Delete" asp-route-id="@item.id">Delete</a> *@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

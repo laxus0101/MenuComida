@@ -1,0 +1,657 @@
+﻿@page
+@model MenuComida.Pages.personalizadaModel
+
+@{
+    ViewData["Title"] = "personalizada";
+}
+@{
+    var idsession = HttpContext.Session.GetInt32("idUsuario_");
+    var nombresession = HttpContext.Session.GetString("nombre");
+    var mailsession = HttpContext.Session.GetString("mailperfil");
+}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalizar Pizza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Colores y estilos generales */
+        :root {
+            --color-primario: #FB4B01;
+            --color-secundario: #353A40;
+            --color-terciario: #F79A0A;
+            --color-fondo: #F5F5F5;
+            --color-icono: #008E97;
+        }
+
+        .menu-header {
+            background-color: var(--color-primario);
+            color: #FFFFFF;
+            text-align: center;
+            padding: 1rem 0;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+            .menu-header h1 {
+                font-size: 2.5rem;
+                margin: 0;
+            }
+
+        body {
+            background-color: var(--color-fondo);
+            font-family: Arial, sans-serif;
+        }
+
+        .container-pizza {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            padding: 20px;
+        }
+
+        .pizza-image {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-image: url('/images/pizzavacia.png');
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            margin-left: -50px;
+            margin-right: 100px;
+        }
+
+        .ingredient {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+        }
+
+        .ingredients-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ingredient-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--color-primario);
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .ingredient-btn.selected {
+                background-color: var(--color-terciario);
+                color: white;
+                cursor: not-allowed;
+            }
+
+            .ingredient-btn:hover:not(.selected) {
+                background-color: var(--color-terciario);
+                color: white;
+            }
+
+            .delete-icon {
+                display: none;
+                cursor: pointer;
+                color: var(--color-icono);
+                margin-left: 10px;
+            }
+
+            .ingredient-btn.selected .delete-icon {
+                display: inline;
+            }
+
+            .flame-image {
+                position: relative;
+                width: 50px;
+                height: 100px;
+                border-radius: 50%;
+                background-position: center;
+                margin-left: -50px;
+                margin-top: -70px;
+            }
+
+            .btn-red {
+                background-color: #dc3545;
+                color: white;
+            }
+
+            .btn-red:hover {
+                background-color: #b02a37;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+
+     @if (idsession == null)
+    {
+        <div class="alert alert-success">
+            Favor de inciar sesion para hacer su orden
+        </div>
+
+        <div>
+            <div class="menu-header mb-4" style="width:100%; background-color:#FFC107; font-family: Helvetica;">
+                <h1>Prepara Tu Pizza</h1>
+            </div>
+
+            <div class="menu-header" style="width:100%; background-color:#008E97; font-family: Helvetica; height: 50px; justify-content:center;">
+                <h5 class="text-start ms-3">Has Las Combinaciones Que Más Desees!</h5>
+            </div>
+        </div>
+
+        <div class="container container-pizza" style="margin-bottom: 510px;">
+            <!-- Contenedor del GIF de fondo y de la imagen de la pizza -->
+            <div class="pizza-container">
+                <div class="burning-effect"></div> <!-- GIF de fondo -->
+                <div class="pizza-image" id="pizza">
+                    @* <img src="" style="width: 330px;" alt=""> *@
+                </div>
+                <div class="flame-image">
+                    <img src="https://i.gifer.com/5GpM.gif" alt="" style="width: 300px; height: 100px; object-fit: cover;">
+                </div>
+                <div>
+
+                    <form method="post">
+                        <input type="hidden" asp-for="carrito.producto" value="Pizza personalizada" />
+                        <input type="hidden" asp-for="carrito.imagen" value="/images/personpizza.jpg" />
+                        <input type="hidden" asp-for="carrito.cantidad" value="1" />
+                        <input type="hidden" asp-for="carrito.precio" value="100" />
+                        <input type="hidden" asp-for="carrito.idUsuario" value="@idsession" />
+
+                        <a class="btn btn-red btn-lg" asp-area="" asp-page="/personas/consultapersonas">
+                            <i class="fas fa-shopping-cart"></i> Añadir al carrito
+                        </a>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- Lista de ingredientes -->
+            <div class="ingredients-list" style="margin-left: 20px;">
+                <button class="ingredient-btn" onclick="addIngredient(this, 'aceitunas')" id="aceitunas-btn">
+                    🫒 Aceitunas
+                    <span class="delete-icon" onclick="removeIngredient('aceitunas', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'pepperoni')" id="pepperoni-btn">
+                    🍕 Pepperoni
+                    <span class="delete-icon" onclick="removeIngredient('pepperoni', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'champiñones')" id="champiñones-btn">
+                    🍄 Champiñones
+                    <span class="delete-icon" onclick="removeIngredient('champiñones', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'pimientos')" id="pimientos-btn">
+                    🌶️ Pimientos
+                    <span class="delete-icon" onclick="removeIngredient('pimientos', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'carne')" id="carne-btn">
+                    🍖 Carne
+                    <span class="delete-icon" onclick="removeIngredient('carne', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'jamon')" id="jamon-btn">
+                    🥓 Jamón
+                    <span class="delete-icon" onclick="removeIngredient('jamon', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'tomate')" id="tomate-btn">
+                    🍅 Tomate
+                    <span class="delete-icon" onclick="removeIngredient('tomate', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'cebolla')" id="cebolla-btn">
+                    🧅 Cebolla
+                    <span class="delete-icon" onclick="removeIngredient('cebolla', event)">❌</span>
+                </button>
+            </div>
+
+
+
+
+        </div>
+
+
+
+        <script>
+            const ingredientsMap = {};
+
+            // Configuración específica para cada ingrediente
+            const ingredientConfig = {
+                aceitunas: {
+                    numIngredientsOuter: 14,
+                    outerRadius: 120,
+                    outerAngleIncrement: (2 * Math.PI) / 10,
+                    numIngredientsInner: 6,
+                    innerRadius: 60,
+                    innerAngleIncrement: (2 * Math.PI) / 6
+                },
+                pepperoni: {
+                    numIngredientsOuter: 10,
+                    outerRadius: 120,
+                    outerAngleIncrement: (2 * Math.PI) / 10,
+                    numIngredientsInner: 5,
+                    innerRadius: 50,
+                    innerAngleIncrement: (2 * Math.PI) / 5
+                },
+                champiñones: {
+                    numIngredientsOuter: 12,
+                    outerRadius: 110,
+                    outerAngleIncrement: (2 * Math.PI) / 12,
+                    numIngredientsInner: 6,
+                    innerRadius: 40,
+                    innerAngleIncrement: (15 * Math.PI) / 6
+                },
+                pimientos: {
+                    numIngredientsOuter: 14,
+                    outerRadius: 125,
+                    outerAngleIncrement: (2 * Math.PI) / 14,
+                    numIngredientsInner: 9,
+                    innerRadius: 70,
+                    innerAngleIncrement: (2 * Math.PI) / 9
+                },
+                carne: {
+                    numIngredientsOuter: 14,
+                    outerRadius: 120,
+                    outerAngleIncrement: (2 * Math.PI) / 14,
+                    numIngredientsInner: 7,
+                    innerRadius: 80,
+                    innerAngleIncrement: (2 * Math.PI) / 7
+                },
+                jamon: {
+                    numIngredientsOuter: 8,
+                    outerRadius: 115,
+                    outerAngleIncrement: (2 * Math.PI) / 8,
+                    numIngredientsInner: 6,
+                    innerRadius: 55,
+                    innerAngleIncrement: (2 * Math.PI) / 6
+                },
+                tomate: {
+                    numIngredientsOuter: 5,
+                    outerRadius: 110,
+                    outerAngleIncrement: (2 * Math.PI) / 5,
+                    numIngredientsInner: 4,
+                    innerRadius: 40,
+                    innerAngleIncrement: (2 * Math.PI) / 4
+                },
+                cebolla: {
+                    numIngredientsOuter: 6,
+                    outerRadius: 105,
+                    outerAngleIncrement: (2 * Math.PI) / 6,
+                    numIngredientsInner: 4,
+                    innerRadius: 55,
+                    innerAngleIncrement: (2 * Math.PI) / 4
+                }
+            };
+
+            function addIngredient(button, type) {
+                const pizza = document.getElementById('pizza');
+
+                if (button.classList.contains('selected')) return;
+
+                button.classList.add('selected');
+                button.disabled = true;
+
+                const config = ingredientConfig[type];
+
+                function createIngredient() {
+                    const ingredient = document.createElement('img');
+                    ingredient.dataset.type = type;
+                    ingredient.classList.add('ingredient');
+
+                    switch (type) {
+                        case 'aceitunas':
+                            ingredient.src = '/images/champinion.png';
+                            ingredient.style.width = '15px';
+                            ingredient.style.height = '15px';
+                            break;
+                        case 'pepperoni':
+                            ingredient.src = '/images/peperoni.png';
+                            ingredient.style.width = '35px';
+                            ingredient.style.height = '35px';
+                            break;
+                        case 'champiñones':
+                            ingredient.src = '/images/mushroom.png';
+                            ingredient.style.width = '20px';
+                            ingredient.style.height = '20px';
+                            break;
+                        case 'pimientos':
+                            ingredient.src = '/images/bellpepper.png';
+                            ingredient.style.width = '20px';
+                            ingredient.style.height = '20px';
+                            break;
+                        case 'carne':
+                            ingredient.src = '/images/carne.png';
+                            ingredient.style.width = '18px';
+                            ingredient.style.height = '18px';
+                            break;
+                        case 'jamon':
+                            ingredient.src = '/images/jamon.png';
+                            ingredient.style.width = '25px';
+                            ingredient.style.height = '25px';
+                            break;
+                        case 'tomate':
+                            ingredient.src = '/images/tomato.png';
+                            ingredient.style.width = '30px';
+                            ingredient.style.height = '30px';
+                            break;
+                        case 'cebolla':
+                            ingredient.src = '/images/onion.png';
+                            ingredient.style.width = '25px';
+                            ingredient.style.height = '25px';
+                            break;
+                        default:
+                            ingredient.src = 'https://via.placeholder.com/30';
+                            ingredient.style.width = '25px';
+                            ingredient.style.height = '25px';
+                    }
+
+                    return ingredient;
+                }
+
+                ingredientsMap[type] = [];
+
+                for (let i = 0; i < config.numIngredientsOuter; i++) {
+                    const ingredient = createIngredient();
+                    const angle = i * config.outerAngleIncrement;
+                    const x = pizza.clientWidth / 2 + config.outerRadius * Math.cos(angle) - 20;
+                    const y = pizza.clientHeight / 2 + config.outerRadius * Math.sin(angle) - 20;
+                    ingredient.style.left = `${x}px`;
+                    ingredient.style.top = `${y}px`;
+                    pizza.appendChild(ingredient);
+                    ingredientsMap[type].push(ingredient);
+                }
+
+                for (let i = 0; i < config.numIngredientsInner; i++) {
+                    const ingredient = createIngredient();
+                    const angle = i * config.innerAngleIncrement;
+                    const x = pizza.clientWidth / 2 + config.innerRadius * Math.cos(angle) - 20;
+                    const y = pizza.clientHeight / 2 + config.innerRadius * Math.sin(angle) - 20;
+                    ingredient.style.left = `${x}px`;
+                    ingredient.style.top = `${y}px`;
+                    pizza.appendChild(ingredient);
+                    ingredientsMap[type].push(ingredient);
+                }
+            }
+
+            function removeIngredient(type, event) {
+                event.stopPropagation();
+                const button = document.getElementById(`${type}-btn`);
+                button.classList.remove('selected');
+                button.disabled = false;
+
+                if (ingredientsMap[type]) {
+                    ingredientsMap[type].forEach(ingredient => ingredient.remove());
+                    delete ingredientsMap[type];
+                }
+            }
+        </script>
+    }
+    else
+    {
+        <div>
+            <div class="menu-header mb-4" style="width:100%; background-color:#FFC107; font-family: Helvetica;">
+                <h1>Prepara Tu Pizza</h1>
+            </div>
+
+            <div class="menu-header" style="width:100%; background-color:#008E97; font-family: Helvetica; height: 50px; justify-content:center;">
+                <h5 class="text-start ms-3">Has Las Combinaciones Que Más Desees!</h5>
+            </div>
+        </div>
+
+        <div class="container container-pizza" style="margin-bottom: 510px;">
+            <!-- Contenedor del GIF de fondo y de la imagen de la pizza -->
+            <div class="pizza-container">
+                <div class="burning-effect"></div> <!-- GIF de fondo -->
+                <div class="pizza-image" id="pizza">
+                    @* <img src="" style="width: 330px;" alt=""> *@
+                </div>
+                <div class="flame-image">
+                    <img src="https://i.gifer.com/5GpM.gif" alt="" style="width: 300px; height: 100px; object-fit: cover;">
+                </div>
+                <div>
+
+                    <form method="post">
+                        <input type="hidden" asp-for="carrito.producto" value="Pizza personalizada" />
+                            <input type="hidden" asp-for="carrito.imagen" value="/images/personpizza.jpg" />
+                        <input type="hidden" asp-for="carrito.cantidad" value="1" />
+                        <input type="hidden" asp-for="carrito.precio" value="100" />
+                        <input type="hidden" asp-for="carrito.idUsuario" value="@idsession" />
+
+                        <button class="btn btn-red btn-lg">
+                            <i class="fas fa-shopping-cart"></i> Añadir al carrito
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- Lista de ingredientes -->
+            <div class="ingredients-list" style="margin-left: 20px;">
+                <button class="ingredient-btn" onclick="addIngredient(this, 'aceitunas')" id="aceitunas-btn">
+                    🫒 Aceitunas
+                    <span class="delete-icon" onclick="removeIngredient('aceitunas', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'pepperoni')" id="pepperoni-btn">
+                    🍕 Pepperoni
+                    <span class="delete-icon" onclick="removeIngredient('pepperoni', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'champiñones')" id="champiñones-btn">
+                    🍄 Champiñones
+                    <span class="delete-icon" onclick="removeIngredient('champiñones', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'pimientos')" id="pimientos-btn">
+                    🌶️ Pimientos
+                    <span class="delete-icon" onclick="removeIngredient('pimientos', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'carne')" id="carne-btn">
+                    🍖 Carne
+                    <span class="delete-icon" onclick="removeIngredient('carne', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'jamon')" id="jamon-btn">
+                    🥓 Jamón
+                    <span class="delete-icon" onclick="removeIngredient('jamon', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'tomate')" id="tomate-btn">
+                    🍅 Tomate
+                    <span class="delete-icon" onclick="removeIngredient('tomate', event)">❌</span>
+                </button>
+                <button class="ingredient-btn" onclick="addIngredient(this, 'cebolla')" id="cebolla-btn">
+                    🧅 Cebolla
+                    <span class="delete-icon" onclick="removeIngredient('cebolla', event)">❌</span>
+                </button>
+            </div>
+
+
+
+
+        </div>
+
+
+
+        <script>
+            const ingredientsMap = {};
+
+            // Configuración específica para cada ingrediente
+            const ingredientConfig = {
+                aceitunas: {
+                    numIngredientsOuter: 14,
+                    outerRadius: 120,
+                    outerAngleIncrement: (2 * Math.PI) / 10,
+                    numIngredientsInner: 6,
+                    innerRadius: 60,
+                    innerAngleIncrement: (2 * Math.PI) / 6
+                },
+                pepperoni: {
+                    numIngredientsOuter: 10,
+                    outerRadius: 120,
+                    outerAngleIncrement: (2 * Math.PI) / 10,
+                    numIngredientsInner: 5,
+                    innerRadius: 50,
+                    innerAngleIncrement: (2 * Math.PI) / 5
+                },
+                champiñones: {
+                    numIngredientsOuter: 12,
+                    outerRadius: 110,
+                    outerAngleIncrement: (2 * Math.PI) / 12,
+                    numIngredientsInner: 6,
+                    innerRadius: 40,
+                    innerAngleIncrement: (15 * Math.PI) / 6
+                },
+                pimientos: {
+                    numIngredientsOuter: 14,
+                    outerRadius: 125,
+                    outerAngleIncrement: (2 * Math.PI) / 14,
+                    numIngredientsInner: 9,
+                    innerRadius: 70,
+                    innerAngleIncrement: (2 * Math.PI) / 9
+                },
+                carne: {
+                    numIngredientsOuter: 14,
+                    outerRadius: 120,
+                    outerAngleIncrement: (2 * Math.PI) / 14,
+                    numIngredientsInner: 7,
+                    innerRadius: 80,
+                    innerAngleIncrement: (2 * Math.PI) / 7
+                },
+                jamon: {
+                    numIngredientsOuter: 8,
+                    outerRadius: 115,
+                    outerAngleIncrement: (2 * Math.PI) / 8,
+                    numIngredientsInner: 6,
+                    innerRadius: 55,
+                    innerAngleIncrement: (2 * Math.PI) / 6
+                },
+                tomate: {
+                    numIngredientsOuter: 5,
+                    outerRadius: 110,
+                    outerAngleIncrement: (2 * Math.PI) / 5,
+                    numIngredientsInner: 4,
+                    innerRadius: 40,
+                    innerAngleIncrement: (2 * Math.PI) / 4
+                },
+                cebolla: {
+                    numIngredientsOuter: 6,
+                    outerRadius: 105,
+                    outerAngleIncrement: (2 * Math.PI) / 6,
+                    numIngredientsInner: 4,
+                    innerRadius: 55,
+                    innerAngleIncrement: (2 * Math.PI) / 4
+                }
+            };
+
+            function addIngredient(button, type) {
+                const pizza = document.getElementById('pizza');
+
+                if (button.classList.contains('selected')) return;
+
+                button.classList.add('selected');
+                button.disabled = true;
+
+                const config = ingredientConfig[type];
+
+                function createIngredient() {
+                    const ingredient = document.createElement('img');
+                    ingredient.dataset.type = type;
+                    ingredient.classList.add('ingredient');
+
+                    switch (type) {
+                        case 'aceitunas':
+                            ingredient.src = '/images/champinion.png';
+                            ingredient.style.width = '15px';
+                            ingredient.style.height = '15px';
+                            break;
+                        case 'pepperoni':
+                            ingredient.src = '/images/peperoni.png';
+                            ingredient.style.width = '35px';
+                            ingredient.style.height = '35px';
+                            break;
+                        case 'champiñones':
+                            ingredient.src = '/images/mushroom.png';
+                            ingredient.style.width = '20px';
+                            ingredient.style.height = '20px';
+                            break;
+                        case 'pimientos':
+                            ingredient.src = '/images/bellpepper.png';
+                            ingredient.style.width = '20px';
+                            ingredient.style.height = '20px';
+                            break;
+                        case 'carne':
+                            ingredient.src = '/images/carne.png';
+                            ingredient.style.width = '18px';
+                            ingredient.style.height = '18px';
+                            break;
+                        case 'jamon':
+                            ingredient.src = '/images/jamon.png';
+                            ingredient.style.width = '25px';
+                            ingredient.style.height = '25px';
+                            break;
+                        case 'tomate':
+                            ingredient.src = '/images/tomato.png';
+                            ingredient.style.width = '30px';
+                            ingredient.style.height = '30px';
+                            break;
+                        case 'cebolla':
+                            ingredient.src = '/images/onion.png';
+                            ingredient.style.width = '25px';
+                            ingredient.style.height = '25px';
+                            break;
+                        default:
+                            ingredient.src = 'https://via.placeholder.com/30';
+                            ingredient.style.width = '25px';
+                            ingredient.style.height = '25px';
+                    }
+
+                    return ingredient;
+                }
+
+                ingredientsMap[type] = [];
+
+                for (let i = 0; i < config.numIngredientsOuter; i++) {
+                    const ingredient = createIngredient();
+                    const angle = i * config.outerAngleIncrement;
+                    const x = pizza.clientWidth / 2 + config.outerRadius * Math.cos(angle) - 20;
+                    const y = pizza.clientHeight / 2 + config.outerRadius * Math.sin(angle) - 20;
+                    ingredient.style.left = `${x}px`;
+                    ingredient.style.top = `${y}px`;
+                    pizza.appendChild(ingredient);
+                    ingredientsMap[type].push(ingredient);
+                }
+
+                for (let i = 0; i < config.numIngredientsInner; i++) {
+                    const ingredient = createIngredient();
+                    const angle = i * config.innerAngleIncrement;
+                    const x = pizza.clientWidth / 2 + config.innerRadius * Math.cos(angle) - 20;
+                    const y = pizza.clientHeight / 2 + config.innerRadius * Math.sin(angle) - 20;
+                    ingredient.style.left = `${x}px`;
+                    ingredient.style.top = `${y}px`;
+                    pizza.appendChild(ingredient);
+                    ingredientsMap[type].push(ingredient);
+                }
+            }
+
+            function removeIngredient(type, event) {
+                event.stopPropagation();
+                const button = document.getElementById(`${type}-btn`);
+                button.classList.remove('selected');
+                button.disabled = false;
+
+                if (ingredientsMap[type]) {
+                    ingredientsMap[type].forEach(ingredient => ingredient.remove());
+                    delete ingredientsMap[type];
+                }
+            }
+        </script>
+    }
+
+
+</body>
+</html>

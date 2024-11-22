@@ -1,0 +1,18 @@
+Mesa: 2
+Nombre: Alondra
+Comida: arrachera
+Bebida: limonada
+Metodo de pago: credito
+
+Mesa: 3
+Nombre: Saul
+Comida: costilla
+Bebida: jamaica
+Metodo de pago: credito
+
+Mesa: 1
+Nombre: Alondra
+Comida: arrachera
+Bebida: limonada
+Metodo de pago: credito
+

@@ -1,0 +1,82 @@
+﻿@page
+@model MenuComida.Pages.carritov2.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>carrito</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="carrito.idpedido" />
+            <div  class="form-group">
+                <input type="hidden" asp-for="carrito.producto" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="carrito.imagen" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="carrito.cantidad" class="control-label"></label>
+                <div class="input-group">
+                    <!-- Botón para sumar 1 -->
+                    <button type="button" class="btn btn-secondary" id="increment">+</button>
+                    <input type="hidden" asp-for="carrito.cantidad" class="form-control" id="cantidadInputt" />
+                    <span class="quantity-input" id="cantidadInput">@Model.carrito.cantidad</span>
+                    <!-- Botón para restar 1 -->
+                    <button type="button" class="btn btn-secondary" id="decrement">-</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="carrito.precio" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="carrito.idUsuario" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        // Obtener los elementos de los botones y el input
+        const incrementButton = document.getElementById("increment");
+        const decrementButton = document.getElementById("decrement");
+        const cantidadInput = document.getElementById("cantidadInputt");
+        const cantidadSpan = document.getElementById("cantidadInput");
+
+        incrementButton.addEventListener("click", function() {
+        let cantidad = parseInt(cantidadSpan.textContent) || 0;  // Usamos textContent para actualizar el span
+        cantidad += 1;
+        cantidadSpan.textContent = cantidad;  // Actualizamos el contenido del span
+        cantidadInput.value = cantidad;  // Actualizamos el valor del input oculto
+        });
+
+
+        decrementButton.addEventListener("click", function() {
+        let cantidad = parseInt(cantidadSpan.textContent) || 0;  // Usamos textContent para actualizar el span
+        if (cantidad > 0) {
+            cantidad -= 1;
+            cantidadSpan.textContent = cantidad;  // Actualizamos el contenido del span
+            cantidadInput.value = cantidad;  // Actualizamos el valor del input oculto
+            }
+        });
+    </script>
+
+
+
+
+} 

@@ -1,0 +1,141 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var idsession = HttpContextAccessor.HttpContext.Session.GetInt32("idUsuario_");
+    var nombresession = HttpContextAccessor.HttpContext.Session.GetString("nombre");
+    var mailsession = HttpContextAccessor.HttpContext.Session.GetString("mailperfil");
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MenuComida</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MenuComida.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        / Estilo para los enlaces del menú con fondo al pasar el mouse /
+        .nav-link {
+            transition: background-color 0.3s ease;
+            padding: 5px 10px;
+            / Aumenta un poco el área de clic / border: 4px;
+            / Bordes redondeados del recuadro /
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            / Fondo semitransparente / color: #f8f9fa !important;
+            / Asegura que el texto sea visible /
+        }
+    </style>
+
+
+</head>
+<body style="">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3 py-2">
+            <div class="container-fluid">
+                <img src="~/lib/assets/Imagen1.png" class="d-block ms-5" alt="Pizza 1" style="width: 50px; height: auto;">
+                <a class="navbar-brand text-white me-auto fs-5" asp-area="" asp-page="/Index" style="font-family: Helvetica;">Pizzería De Konoha</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between mx-5">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6" asp-area="" asp-page="/menu_carrito">Menú</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6" asp-area="" asp-page="/Sucursales">Sucursales</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6" asp-area="" asp-page="personalizada">Prepara Tu Pizza</a>
+                        </li>
+
+
+                        <div class="d-flex ms-auto">
+                           @if (idsession != null)
+                            {
+                                <a class="nav-link text-white fs-6 me-4" href="/personas/consultapersonas" style="border:2px dashed; border-color: #8D8D8D;">
+                                    <i class="bi bi-person me-1"></i> Perfil
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-white fs-6 me-4" href="/personas/consultapersonas" style="border:2px dashed; border-color: #8D8D8D;">
+                                    <i class="bi bi-person me-1"></i> Iniciar sesión
+                                </a>
+                                <a href="/loginv2" class="nav-link text-white fs-6 ms-2" style="border:2px dashed;  border-color: #8D8D8D;">Registrarse</a>
+                            }
+                            </a>
+                            @* *@
+                        </div> 
+                        <li class="nav-item d-flex align-items-center justify-content-center">
+                            <a class="text-white fs-6" asp-area="" asp-page="/carritov2/Index">
+                                <img src="~/lib/assets/carrito-de-compras.png" alt="Carrito de Compras" style=" margin-left: 28px; width: 35px; height: auto;">
+                            </a>
+                        </li>
+
+                    </ul>
+                    <!-- Sección de Iniciar sesión y Registrarse a la derecha -->
+
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    <div class="container mb-5 pb-5">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+    <footer class="bg-dark text-white text-center mt-5">
+        <div class="container py-0">
+            <div class="row">
+                <div class="col-md-4 mt-5">
+                    <h5>Sucursales</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/sucursal1">Sucursales</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mt-5">
+                    <h5>Contáctanos</h5>
+                    <p>Email: contacto@pizzeriadenokona.com</p>
+                    <p>Teléfono: (123) 456-7890</p>
+                </div>
+                <div class="col-md-4 mt-5">
+                    <h5>Síguenos en Redes Sociales</h5>
+                    <a href="#" class="me-2"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="me-2"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="me-2"><i class="bi bi-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="bg-warning">&copy; 2024 Delicias Culinarias. Todos los derechos reservados.</p>
+    </footer>
+
+
+
+
+</body>
+</html>

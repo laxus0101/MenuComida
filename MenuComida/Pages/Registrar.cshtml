@@ -1,0 +1,109 @@
+﻿@page
+@model MenuComida.Pages.RegistrarModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #D8D9DE; /* Fondo suave */
+            font-family: Arial, sans-serif;
+        }
+
+        .register-container {
+            max-width: 500px;
+            margin: auto;
+            padding-top: 8%;
+        }
+
+        .register-box {
+            background-color: #FFFFFF; /* Fondo blanco */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            border-top: 5px solid #008E97; /* Resalta el borde superior */
+        }
+
+            .register-box h2 {
+                margin-bottom: 20px;
+                color: #005778; /* Título en azul oscuro */
+                font-weight: bold;
+                text-align: center;
+            }
+
+        .form-label {
+            color: #005778; /* Etiquetas en azul oscuro */
+            font-weight: 600;
+        }
+
+        .form-control {
+            border-color: #D8D9DE; /* Bordes claros en los inputs */
+        }
+
+        .btn-primary {
+            background-color: #FB4B01; /* Botón naranja */
+            border-color: #FB4B01;
+            font-weight: 600;
+        }
+
+            .btn-primary:hover {
+                background-color: #008E97; /* Cambia a verde oscuro al pasar el cursor */
+                border-color: #008E97;
+            }
+
+        .text-link {
+            color: #008E97; /* Enlaces en verde oscuro */
+        }
+
+            .text-link:hover {
+                color: #FB4B01; /* Cambia a naranja al pasar el cursor */
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="register-container" style="margin-bottom: 400px;">
+        <div class="register-box">
+            <h2>Crear Cuenta</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="nombre" class="form-label" style="font-family: Helvetica;">Nombre Completo</label>
+                    <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre completo">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label" style="font-family: Helvetica;">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label" style="font-family: Helvetica;">Contraseña</label>
+                    <input type="password" class="form-control" id="password" placeholder="Crea una contraseña">
+                </div>
+                <div class="mb-3">
+                    <label for="confirm-password" class="form-label" style="font-family: Helvetica;">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" id="confirm-password" placeholder="Confirma tu contraseña">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary" style="font-family: Helvetica;">Registrarse</button>
+                </div>
+                <div class="text-center mt-3">
+                    <span>¿Ya tienes una cuenta? <a href="#" class="text-link" style="font-family: Helvetica;">Inicia sesión aquí</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

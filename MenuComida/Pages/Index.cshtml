@@ -1,0 +1,160 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Pizzería</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Colores personalizados */
+        :root {
+            --color-primario: #008E97;
+            --color-secundario: #FB4B01;
+            --color-terciario: #005778;
+            --color-fondo: #D8D9DE;
+            --color-blanco: #FFFFFF;
+        }
+
+        /* Estilos para el encabezado */
+        header {
+            background-color: var(--color-primario);
+            color: white;
+        }
+
+        /* Colores y márgenes en botones de carrusel */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: var(--color-secundario);
+            border-radius: 50%;
+        }
+
+        /* Estilos para la sección de platos */
+        .card {
+            border: none;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: var(--color-secundario);
+        }
+
+        .card-text {
+            color: var(--color-terciario);
+        }
+
+        /* Fondo de la página */
+        body {
+            background-color: var(--color-fondo);
+        }
+
+        /* Título principal */
+        h1, h2 {
+            color: var(--color-blanco);
+        }
+
+        /* Indicadores del carrusel */
+        .carousel-indicators [data-bs-target] {
+            background-color: var(--color-terciario);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sección de bienvenida -->
+    <header class="text-center py-4 mb-3" style="border-radius: 10px;">
+        <div class="container">
+            <h1 style="font-family: Helvetica; font-size:45px;">Pizzería De Konoha</h1>
+            <img src="~/lib/assets/Imagen1.png" class="d-block mx-auto" alt="Pizza 1" style=" width: 140px; height: auto;">
+            <p class="lead" style="font-size: 20px;">Donde cada rebanada cuenta su historia</p>
+        </div>
+    </header>
+
+    <!-- Carrusel -->
+    <div id="miCarrusel" class="carousel slide" data-bs-ride="carousel">
+        <!-- Indicadores del carrusel -->
+        <ol class="carousel-indicators">
+            <li data-bs-target="#miCarrusel" data-bs-slide-to="0" class="active"></li>
+            <li data-bs-target="#miCarrusel" data-bs-slide-to="1"></li>
+            <li data-bs-target="#miCarrusel" data-bs-slide-to="2"></li>
+        </ol>
+
+        <!-- Contenido del carrusel -->
+        <div class="carousel-inner " style="border-radius: 10px;">
+            <div class="carousel-item active">
+                <img src="https://i.pinimg.com/736x/e1/d5/d4/e1d5d476d4be381e7afe63fa923d54d0.jpg" class="d-block w-100" alt="Pizza 1" style="height: 500px;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://i.blogs.es/fff4ca/pizzas/450_1000.jpg" class="d-block w-100" alt="Pizza 2" style="height: 500px;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://arteflame.com/cdn/shop/articles/The_10_Best_Pizza_Toppings_and_Why_They_Reign_Supreme.webp?v=1717620006&width=1600" class="d-block w-100" alt="Pizza 3" style="height: 500px;">
+            </div>
+        </div>
+
+        <!-- Controles de navegación -->
+        <a class="carousel-control-prev" href="#miCarrusel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </a>
+        <a class="carousel-control-next" href="#miCarrusel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </a>
+    </div>
+
+    <!-- Galería de platos -->
+    <section class="py-5" ">
+        <div class="container mb-5 py-5 px-5" style="border-radius: 10px; background-color:#353A40;">
+            <h2 class="text-center mb-5 card-title" style="color:#F79A0A; font-family: Helvetica;">Recien Agregado</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://cache.dominos.com/wam/prod/market/MX/_es/images/promo/1107d982-6d3e-4bf1-91a2-9a4b9d5d80a4.jpg" class="card-img-top" alt="Pizza de rajas">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Pizza Rajas</h5>
+                            <p class="card-text text-dark">La clásica y sencilla de Rajas: salsa de tomate, rajas, mozzarella fresca, y albahaca.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://cache.dominos.com/wam/prod/market/MX/_es/images/promo/5ec2a08c-4291-4fe1-a511-d2a5345665e1.jpg" class="card-img-top" alt="Pizza de cochinita">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Pizza Cochinita</h5>
+                            <p class="card-text text-dark">Una de las favoritas, con cochinita crujiente, queso mozzarella, y salsa casera.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://cache.dominos.com/wam/prod/market/MX/_es/images/promo/4162388f-2a56-4bec-a23f-5b080ca37769.jpg" class="card-img-top" alt="Pizza de pastor">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Pizza Pastor</h5>
+                            <p class="card-text text-dark">Para los amantes del pastor: tomate, pimientos, aceitunas, pastor y queso vegano.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+</body>
+
+</html>

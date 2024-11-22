@@ -1,0 +1,69 @@
+﻿@page
+@model Contacto
+@{
+    ViewData["Title"] = "Contacto";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sección de formulario -->
+    <section  style="padding-bottom: 100px;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-lg">
+                        <div class="card-body">
+                            <h3 class="text-center mb-4">Formulario de Contacto</h3>
+                            <form method="post">
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre Completo</label>
+                                    <input asp-for="Name" placeholder="Tu nombre completo" required>
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input asp-for="Email" placeholder="Tu correo electrónico" required>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="telefono" class="form-label">Número de Teléfono</label>
+                                    <input asp-for="Telefono" placeholder="Tu número de teléfono" required>
+                                    <span asp-validation-for="Telefono" class="text-danger"></span>
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="mensaje" class="form-label">Mensaje</label>
+                                    <textarea class="form-control" asp-for="Mensaje" rows="4" placeholder="Escribe tu mensaje" required></textarea>
+                                    <span asp-validation-for="Mensaje" class="text-danger"></span>
+
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (TempData["SuccessMessage"]!=null)
+        {
+            <div class="alert alert-success my-5">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>

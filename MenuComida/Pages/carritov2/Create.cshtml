@@ -1,0 +1,214 @@
+﻿
+
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primario: #FB4B01;
+            --color-secundario: #353A40;
+            --color-terciario: #F79A0A;
+            --color-fondo: #F5F5F5;
+            --color-icono: #008E97;
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            font-family: Arial, sans-serif;
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-header {
+            color: var(--color-primario);
+            font-weight: bold;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 1rem;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+            .cart-item:hover {
+                transform: scale(1.02);
+            }
+
+            .cart-item img {
+                width: 90px;
+                height: 90px;
+                border-radius: 10px;
+                margin-right: 20px;
+            }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--color-secundario);
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--color-terciario);
+            font-weight: bold;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+
+            .quantity-controls button {
+                background-color: var(--color-primario);
+                color: white;
+                border: none;
+                padding: 0.3rem 0.6rem;
+                font-size: 1.2rem;
+                border-radius: 6px;
+                margin: 0 5px;
+                cursor: pointer;
+            }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0.3rem;
+            color: var(--color-secundario);
+            background-color: #F5F5F5;
+            display: inline-block;
+        }
+
+        .remove-btn {
+            color: var(--color-icono);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .cart-total {
+            text-align: right;
+            margin-top: 30px;
+        }
+
+            .cart-total h4 {
+                color: var(--color-primario);
+                font-size: 1.6rem;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="cart-container" style="margin-bottom: 500px;">
+        <h2 class="cart-header">Tu Carrito</h2>
+
+        <!-- Artículo en el carrito -->
+        @foreach (var item in Model.carritoo)
+        {
+            <div class="cart-item">
+                <img src="@item.imagen" alt="@item.producto">
+                <div class="cart-item-details">
+                    <div class="cart-item-title">@item.producto</div>
+                    <div class="cart-item-price">$@item.precio MXN</div>
+                </div>
+                <form method="post" asp-page-handler="Update" >
+            @* <input type="hidden" name="producto" value="@item.producto" />
+            <input type="hidden" asp-for="@item.idpedido" name="carrito.idpedido" />
+            <input type="hidden" asp-for="@item.producto" name="carrito.producto" />
+            <input type="hidden" asp-for="@item.imagen" name="carrito.imagen" />
+            <input type="hidden" asp-for="@item.cantidad" name="carrito.cantidad" id="cantidadInputt" />
+            <input type="hidden" asp-for="@item.precio" name="carrito.precio" />
+            <input type="hidden" asp-for="@item.idUsuario" name="carrito.idUsuario" /> *@
+            <div class="quantity-controls">
+
+            <button type="button" class="btn btn-secondary" id="decrement">-</button>
+
+            <span class="quantity-input" id="cantidadInput">@item.cantidad</span>
+            <button type="button" class="btn btn-secondary" id="increment">+</button>
+
+            </div>
+            <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            </form>
+
+
+
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" name="producto" value="@item.producto" />
+                    <button type="submit" class="remove-btn"><i class="bi bi-trash"></i></button>
+                </form>
+
+
+            </div>
+
+
+        }
+
+        <div class="cart-total">
+            <h4>Total: <span id="cart-total-price">$310.00 MXN</span></h4>
+        </div>
+    </div>
+
+
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+
+        <script>
+    // Obtener los elementos de los botones y el input
+    const incrementButton = document.getElementById("increment");
+    const decrementButton = document.getElementById("decrement");
+    const cantidadInput = document.getElementById("cantidadInputt");
+    const cantidadSpan = document.getElementById("cantidadInput");
+
+    incrementButton.addEventListener("click", function () {
+    let cantidad = parseInt(cantidadSpan.textContent) || 0;  // Usamos textContent para actualizar el span
+    cantidad += 1;
+    cantidadSpan.textContent = cantidad;  // Actualizamos el contenido del span
+    cantidadInput.value = cantidad;  // Actualizamos el valor del input oculto
+    });
+
+
+    decrementButton.addEventListener("click", function () {
+    let cantidad = parseInt(cantidadSpan.textContent) || 0;  // Usamos textContent para actualizar el span
+    if (cantidad > 0) {
+    cantidad -= 1;
+    cantidadSpan.textContent = cantidad;  // Actualizamos el contenido del span
+    cantidadInput.value = cantidad;  // Actualizamos el valor del input oculto
+    }
+    });
+    </script>
+
+    }
+
+</body>
+</html>
